@@ -12,7 +12,7 @@ from lxml import etree
 def find_xml_refs(xml):
     rlist = []
 
-    if isinstance(xml, unicode):
+    if isinstance(xml, str):
         xml = xml.encode('utf8')
 
     root = etree.fromstring(xml)
