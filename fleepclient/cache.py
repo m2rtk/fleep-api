@@ -849,7 +849,7 @@ class Conversation(object):
             return self.messages[message_nr - 1]
         else:
             nrs = self.messages.keys()
-            nrs.sort()
+            sorted(nrs)
             message_pos = bisect_left(nrs, message_nr)
             if message_pos == len(nrs) or nrs[message_pos] >= message_nr:
                 message_pos -= 1
@@ -864,7 +864,7 @@ class Conversation(object):
             return self.messages[message_nr + 1]
         elif message_nr < self.last_message_nr:
             nrs = self.messages.keys()
-            nrs.sort()
+            sorted(nrs)
             message_pos = bisect_right(nrs, message_nr)
             if message_pos < len(nrs) and nrs[message_pos] <= message_nr:
                 message_pos += 1
@@ -901,7 +901,7 @@ class Conversation(object):
     def show_all(self):
         self._sync() # ensure we have initial sync
         nrs = self.messages.keys()
-        nrs.sort()
+        sorted(nrs)
         flow = ''
         lines = self.get_lines(nrs)
         flow = '\n'.join([l for l in lines if l])
@@ -910,7 +910,7 @@ class Conversation(object):
     def show_tasklist(self, show_archive = False):
         self._sync()
         nrs = self.messages.keys()
-        nrs.sort()
+        sorted(nrs)
         lines = []
         if show_archive:
             for nr in nrs:
@@ -933,7 +933,7 @@ class Conversation(object):
         """
         self._sync() # ensure we have initial sync
         nrs = self.messages.keys()
-        nrs.sort()
+        sorted(nrs)
         flow = ''
         if self.show_horizon < self.last_message_nr:
             i = bisect_left(nrs, self.show_horizon + 1)
