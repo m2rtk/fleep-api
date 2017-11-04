@@ -1,6 +1,7 @@
 """Python Library for Fleep HTTP API.
 """
 
+from builtins import object
 import requests
 import json
 import logging
@@ -88,7 +89,3 @@ class FleepApiBase(object):
             self.ws.cookies.set('token_id', token)
         if ticket is not None:
             self.ticket = ticket
-
-
-
-

@@ -1,5 +1,7 @@
+
 """Python Library for Fleep HTTP API.
 """
+from __future__ import print_function
 
 from .base import FleepApiBase
 
@@ -9,7 +11,6 @@ from .base import FleepApiBase
 
 class FleepApi(FleepApiBase):
     """Python Library for Fleep.
-
     Fleep api is designed as http service calls that use JSON encoding to transfer data.
     All services are implemented as HTTP POST calls. This allows for simple scripting.
     Mapping to PUT, DELETE, GET might look ok in some cases but would increase confusion

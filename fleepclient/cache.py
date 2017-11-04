@@ -2,6 +2,9 @@
 """Python Library for Fleep HTTP API.
 """
 
+from builtins import str
+from builtins import range
+from builtins import object
 import json
 import logging
 import re
@@ -849,7 +852,7 @@ class Conversation(object):
             return self.messages[message_nr - 1]
         else:
             nrs = list(self.messages.keys())
-            sorted(nrs)
+            nrs.sort()
             message_pos = bisect_left(nrs, message_nr)
             if message_pos == len(nrs) or nrs[message_pos] >= message_nr:
                 message_pos -= 1
@@ -864,7 +867,7 @@ class Conversation(object):
             return self.messages[message_nr + 1]
         elif message_nr < self.last_message_nr:
             nrs = list(self.messages.keys())
-            sorted(nrs)
+            nrs.sort()
             message_pos = bisect_right(nrs, message_nr)
             if message_pos < len(nrs) and nrs[message_pos] <= message_nr:
                 message_pos += 1
@@ -901,7 +904,7 @@ class Conversation(object):
     def show_all(self):
         self._sync() # ensure we have initial sync
         nrs = list(self.messages.keys())
-        sorted(nrs)
+        nrs.sort()
         flow = ''
         lines = self.get_lines(nrs)
         flow = '\n'.join([l for l in lines if l])
@@ -910,7 +913,7 @@ class Conversation(object):
     def show_tasklist(self, show_archive = False):
         self._sync()
         nrs = list(self.messages.keys())
-        sorted(nrs)
+        nrs.sort()
         lines = []
         if show_archive:
             for nr in nrs:
@@ -933,7 +936,7 @@ class Conversation(object):
         """
         self._sync() # ensure we have initial sync
         nrs = list(self.messages.keys())
-        sorted(nrs)
+        nrs.sort()
         flow = ''
         if self.show_horizon < self.last_message_nr:
             i = bisect_left(nrs, self.show_horizon + 1)
@@ -1030,7 +1033,7 @@ class ContactList(object):
     def sync_fadr(self, fleep_address):
         """
         """
-        for r_contact in self.contacts.values():
+        for r_contact in list(self.contacts.values()):
             if r_contact.get('fleep_address') == fleep_address:
                 return r_contact['account_id']
         return None
@@ -1052,7 +1055,7 @@ class ContactList(object):
         """Send all uuid's you have to server and let server return you all you are missing
             also sets's internal event horizon so we know we are in full sync now
         """
-        res = self.api.contact_sync_all(self.contacts.keys())
+        res = self.api.contact_sync_all(list(self.contacts.keys()))
         for a in res['contacts']:
             self.emails[a['email']] = self.contacts[a['account_id']] = a
         self.fully_synced = True
@@ -1117,7 +1120,7 @@ class ContactList(object):
     def show(self):
         """Display contents of contact cache in log.
         """
-        contacts = sorted(self.contacts.values(), key=lambda x: x['email'])
+        contacts = sorted(list(self.contacts.values()), key=lambda x: x['email'])
         contacts_show = [contact for contact in contacts if contact['is_hidden_for_add'] != True]
         contactlist = "Contacts:\n"
         for contact in contacts_show:
@@ -1190,7 +1193,7 @@ class TeamList(object):
     def show(self):
         """Display contents of team cache
         """
-        teams = sorted(self.teams.values(), key=lambda x: x['team_name'])
+        teams = sorted(list(self.teams.values()), key=lambda x: x['team_name'])
         return '\n'.join(
            ["%s" % (r_team['team_name'],) for r_team in teams])
 
@@ -1242,7 +1245,7 @@ class FleepCache(object):
         ''' Hide all exisiting conversations for given user
         '''
         count = 0
-        for r_conv in self.conversations.values():
+        for r_conv in list(self.conversations.values()):
             if not r_conv.hide_message_nr >= r_conv.last_message_nr:
                 if r_conv.can_post and r_conv.topic:
                     r_conv.set_topic('')
@@ -1253,7 +1256,7 @@ class FleepCache(object):
     def conversation_list(self):
         """ Returns sorted list of visible conversations
         """
-        conversations = sorted(self.conversations.values(), key=lambda x: x.last_message_time, reverse=True)
+        conversations = sorted(list(self.conversations.values()), key=lambda x: x.last_message_time, reverse=True)
         conversations.sort(key=lambda x: x.is_unread(), reverse=True)
         conversations = [conv for conv in conversations if not conv.hide_message_nr >= conv.last_message_nr]
         return conversations
@@ -1309,7 +1312,7 @@ class FleepCache(object):
     def conversation_find(self, topic):
         """Return list of conversations with given topic.
         """
-        return [v for v in self.conversations.values() if v.topic == topic]
+        return [v for v in list(self.conversations.values()) if v.topic == topic]
 
     def conversation_create(self, topic, emails, message = None, attachments = None):
         """Create conversation
@@ -1375,7 +1378,7 @@ class FleepCache(object):
             elif rec['mk_rec_type'] == 'contact':
                 self.contacts.upsert(rec)
             elif rec['mk_rec_type'] == 'team':
-                if rec['is_deleted'] and rec['team_id'] in self.teams.teams.keys():
+                if rec['is_deleted'] and rec['team_id'] in list(self.teams.teams.keys()):
                     del self.teams.teams[rec['team_id']]
                 else:
                     self.teams.upsert(rec)

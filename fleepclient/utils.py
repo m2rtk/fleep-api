@@ -1,16 +1,3 @@
-r"""Convert XML back to text and html.
-
->>> xml = '<msg><p>Para<br/></p><p><q>&gt; Quote</q></p></msg>'
->>> convert_xml_to_text(xml)
-u'Para\n\n\n> Quote\n'
->>> convert_xml_to_text(xml, True)
-u'Para\n\n\n'
->>> convert_xml_to_text(u'<msg><p><a flp="https://fleep.io&lt;&lt;" fls="&gt;&gt;" href="https://fleep.io">Fleep</a> is the best</p></msg>', no_markup=True)
-u'Fleep is the best\n'
->>> convert_xml_to_text(u'<msg><p><a flp="https://fleep.io&lt;&lt;" fls="&gt;&gt;" href="https://fleep.io">Fleep</a> is the best</p></msg>')
-u'https://fleep.io<<Fleep>> is the best\n'
-"""
-
 import logging
 import xml.sax
 import xml.sax.handler
@@ -109,4 +96,3 @@ def convert_xml_to_text(xmlstr, skip_quote=False, skip_refs=False, no_markup=Fal
 if __name__ == '__main__':
     import doctest, sys
     doctest.testmod(raise_on_error=('--raise' in sys.argv))
-
