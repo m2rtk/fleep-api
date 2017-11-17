@@ -38,6 +38,7 @@ class FleepApiBase(object):
         logging.debug("PARAMS: %s", js)
 
         r = self.ws.post(url, data = js, headers = hdr, verify = True)
+        logging.debug('raw RESULT:\n%s', pprint.pformat(res, 4))
         if r.text and r.text[0] in ('{', '['):
             res = json.loads(r.text)
         else:
@@ -59,6 +60,7 @@ class FleepApiBase(object):
         logging.debug('REQUEST: %s', url)
 
         r = self.ws.post(url, params = {'ticket' : self.ticket}, files = files, verify = True)
+        logging.debug('raw RESULT:\n%s', pprint.pformat(res, 4))
         if r.text and r.text[0] in ('{', '['):
             res = json.loads(r.text)
         else:
