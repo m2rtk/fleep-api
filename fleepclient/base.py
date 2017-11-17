@@ -60,7 +60,8 @@ class FleepApiBase(object):
         logging.debug('REQUEST: %s', url)
 
         r = self.ws.post(url, params = {'ticket' : self.ticket}, files = files, verify = True)
-        logging.debug('raw RESULT:\n%s', pprint.pformat(r, 4))
+        logging.debug('raw RESULT:%s', pprint.pformat(r, 4))
+        logging.debug('raw RESULT:%s', pprint.pformat(r.text, 5))
         if r.text and r.text[0] in ('{', '['):
             res = json.loads(r.text)
         else:
